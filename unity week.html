@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>GoVote — University Student Week</title>
+    <link rel="stylesheet" href="unity week.css">
+    <!-- Google Fonts: Inter only (clean, realistic typography) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="app-container">
+    <div class="event-header">
+        <h1>UNIVERSITY STUDENT WEEK</h1>
+        <div class="event-sub">#GoVote2026</div>
+    </div>
+
+    <div class="search-section">
+        <div class="search-label">Event Categories</div>
+        <div class="event-sub" style="margin-bottom: 12px; font-size:13px;">Browse through multiple categories and vote for your respective stars.</div>
+        <input type="text" class="search-input" placeholder="Search category" id="searchInput">
+    </div>
+
+    <div class="notice-text">
+        N.B: 30% of decisions come from this platform, judges are in control of the rest.
+    </div>
+
+    <!-- ========== CATEGORIES WITH WORKING LINKS ========== -->
+    <!-- Each "View Contestants" is an <a> tag pointing to "master gouni.html" (change href as needed) -->
+    <div id="categoriesContainer">
+        <!-- 1. Master GOUNI 2026 -->
+        <div class="category-block" data-category-name="Master GOUNI 2026">
+            <div class="image-card">
+                <div class="card-placeholder-icon">
+                    <span>🔒</span>
+                </div>
+            </div>
+            <div class="title-below">
+                <span class="category-title"><span class="accent-highlight">Master</span> GOUNI 2026</span>
+            </div>
+            <div class="description-below">
+                Crown the ultimate king of campus. Vote for leadership, charisma, and impact.
+            </div>
+            <a href="master gouni.html" class="view-link">View Contestants →</a>
+        </div>
+
+        <!-- 2. Miss GOUNI 2026 -->
+        <div class="category-block" data-category-name="Miss GOUNI 2026">
+            <div class="image-card">
+                <div class="card-placeholder-icon">
+                    <span>🔒</span>
+                </div>
+            </div>
+            <div class="title-below">
+                <span class="category-title"><span class="accent-highlight">Miss</span> GOUNI 2026</span>
+            </div>
+            <div class="description-below">
+                Celebrating elegance, intelligence, and influence. Your vote decides the queen.
+            </div>
+            <a href="master gouni.html" class="view-link">View Contestants →</a>
+        </div>
+
+        <!-- 3. Best Dressed On Campus -->
+        <div class="category-block" data-category-name="Best Dressed On Campus">
+            <div class="image-card">
+                <div class="card-placeholder-icon">
+                    <span>🔒</span>
+                </div>
+            </div>
+            <div class="title-below">
+                <span class="category-title"><span class="accent-highlight">Best Dressed</span> On Campus</span>
+            </div>
+            <div class="description-below">
+                Style icon of the semester — from streetwear to couture fresh looks.
+            </div>
+            <a href="master gouni.html" class="view-link">View Contestants →</a>
+        </div>
+
+        <!-- 4. Best Dancer On Campus -->
+        <div class="category-block" data-category-name="Best Dancer On Campus">
+            <div class="image-card">
+                <div class="card-placeholder-icon">
+                    <span>🔒</span>
+                </div>
+            </div>
+            <div class="title-below">
+                <span class="category-title"><span class="accent-highlight">Best Dancer</span> On Campus</span>
+            </div>
+            <div class="description-below">
+                Rhythm, moves, and stage presence. Vote for the dancer who steals the show.
+            </div>
+            <a href="master gouni.html" class="view-link">View Contestants →</a>
+        </div>
+
+        <!-- 5. Master GOUNI 2026 (second instance) -->
+        <div class="category-block" data-category-name="Master GOUNI 2026">
+            <div class="image-card">
+                <div class="card-placeholder-icon">
+                    <span>🔒</span>
+                </div>
+            </div>
+            <div class="title-below">
+                <span class="category-title"><span class="accent-highlight">Master</span> GOUNI 2026</span>
+            </div>
+            <div class="description-below">
+                Second spotlight: Be part of the legacy. Vote for Master GOUNI again!
+            </div>
+            <a href="master gouni.html" class="view-link">View Contestants →</a>
+        </div>
+    </div>
+
+    <div id="noResultsMsg" class="no-results" style="display: none;">✨ No matching categories found. Try another keyword.</div>
+
+    <div class="footer-note">
+        © 2026 GoVote — By Obi-Dev & SkillMynte
+    </div>
+</div>
+
+<script>
+    // ========== SIMPLE SEARCH/FILTER (does NOT interfere with links) ==========
+    const searchInput = document.getElementById('searchInput');
+    const categoryBlocks = document.querySelectorAll('.category-block');
+    const noResultsDiv = document.getElementById('noResultsMsg');
+
+    function getCategoryTitleText(block) {
+        const titleSpan = block.querySelector('.category-title');
+        if (!titleSpan) return '';
+        return titleSpan.textContent.trim().toLowerCase();
+    }
+
+    function filterCategories(filterValue) {
+        const term = filterValue.trim().toLowerCase();
+        let visibleCount = 0;
+
+        categoryBlocks.forEach(block => {
+            const titleText = getCategoryTitleText(block);
+            if (term === '' || titleText.includes(term)) {
+                block.classList.remove('hidden-category');
+                visibleCount++;
+            } else {
+                block.classList.add('hidden-category');
+            }
+        });
+
+        if (visibleCount === 0 && term !== '') {
+            noResultsDiv.style.display = 'block';
+        } else {
+            noResultsDiv.style.display = 'none';
+        }
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            filterCategories(e.target.value);
+        });
+        searchInput.value = '';
+        filterCategories('');
+    }
+
+    // No extra JS on links — they are pure <a> tags and will navigate naturally.
+    // All design rules are respected: image placeholders, text below, no gradients, no shadows.
+</script>
+</body>
+</html>

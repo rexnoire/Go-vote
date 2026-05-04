@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>GoVote — Live Vote Counter</title>
+  <link rel="stylesheet" href="contestant.css">
+  <!-- Google Fonts: Inter (clean, crisp) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="voting-card">
+  <!-- TOP IMAGE AREA: strict placeholder, no text, no decoration -->
+  <div class="image-placeholder" aria-label="image placeholder for contestant visual"></div>
+
+  <div class="card-content">
+    <!-- NAME exactly as screenshot -->
+    <div class="contestant-name">Offor Franklin</div>
+    <!-- SUBTEXT / course and level -->
+    <div class="contestant-detail">COMPUTER SCIENCE, 300LVL</div>
+
+    <!-- VOTE COUNTER: dynamic digits in separate boxes (4 digits) -->
+    <div class="vote-digits" id="digitContainer">
+      <div class="digit-box" id="digit1">3</div>
+      <div class="digit-box" id="digit2">4</div>
+      <div class="digit-box" id="digit3">5</div>
+      <div class="digit-box" id="digit4">9</div>
+    </div>
+
+    <!-- LABEL: Live Vote Counter -->
+    <div class="live-label">Live Vote Counter</div>
+
+    <!-- BUTTON: Vote Now -->
+    <a href="voting.html"><button class="vote-btn" id="voteNowBtn">Vote Now</button></a>
+
+    <!-- ABOUT SECTION: exact double sentence as described (same paragraph style) -->
+    <div class="about-title">About Contestant</div>
+    <div class="about-text">
+      Browse through multiple categories and vote for your respective stars, Browse through multiple categories and vote for your respective stars Browse through multiple categories and vote for your respective stars., Browse through multiple categories and vote for your respective stars Browse through multiple categories and vote for your respective star.
+    </div>
+
+    <!-- FOOTER (subtle, only to match design structure, not intrusive) -->
+    <div class="footer-note">GoVote • real‑time counter</div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---- VOTE COUNTER LOGIC ----
+    // The initial digits are exactly as screenshot: 3 4 5 9
+    // We'll use a numeric value and store internal state.
+    // number range: we want 4 digits exactly, from 0 to 9999 (padded to 4 digits)
+    // Starting vote count = 3459 (matches "3 4 5 9")
+    let currentVotes = 3459;
+
+    // DOM elements for each digit box
+    const digitElements = {
+      0: document.getElementById('digit1'), // thousands
+      1: document.getElementById('digit2'), // hundreds
+      2: document.getElementById('digit3'), // tens
+      3: document.getElementById('digit4')  // units
+    };
+
+    // Helper: update the 4 separate digit boxes based on currentVotes
+    function updateDigitDisplay() {
+      // Ensure we treat as integer and clamp between 0 and 9999
+      let voteValue = currentVotes;
+      if (voteValue < 0) voteValue = 0;
+      if (voteValue > 9999) voteValue = 9999;
+      currentVotes = voteValue; // sync back
+
+      // convert to zero-padded 4-digit string
+      const padded = String(voteValue).padStart(4, '0');
+      // splits into array of chars: thousands, hundreds, tens, units
+      const digits = padded.split('');  // ['3','4','5','9'] for ex
+
+      // update each box
+      for (let i = 0; i < 4; i++) {
+        if (digitElements[i]) {
+          digitElements[i].innerText = digits[i];
+        }
+      }
+    }
+
+    // increment vote function: vote adds 1 (realistic scenario)
+    // Satisfies dynamic counter with easy update. In case of vote button click,
+    // we increment by 1. But we also could support custom, but spec wants button click 
+    // console log "Vote clicked" AND increment the count.
+    // According to requirements: "Vote counter must be dynamic, split digits into separate boxes,
+    // easy to update value. Button click: console.log('Vote clicked')"
+    // We'll also update the count value each time (vote increments).
+    function incrementVote() {
+      // increment current votes by 1 (but maximum 9999)
+      if (currentVotes < 9999) {
+        currentVotes++;
+      } else {
+        // if already max, we can clamp or do nothing (optional, no overflow)
+        currentVotes = 9999;
+      }
+      updateDigitDisplay();
+    }
+
+    // Additional helper if there's any external requirement to set value easily.
+    // We also make it globally accessible for debug, but ensures dynamic.
+    window.setVoteValue = function(newValue) {
+      if (typeof newValue === 'number' && !isNaN(newValue)) {
+        let val = Math.floor(Math.abs(newValue));
+        if (val > 9999) val = 9999;
+        currentVotes = val;
+        updateDigitDisplay();
+      }
+    };
+
+    // get current vote count (utility)
+    window.getCurrentVotes = () => currentVotes;
+
+    // attach event listener to "Vote Now" button
+    const voteButton = document.getElementById('voteNowBtn');
+    if (voteButton) {
+      voteButton.addEventListener('click', function() {
+        // Required console log exactly: "Vote clicked"
+        console.log("Vote clicked");
+        // also increment the live counter
+        incrementVote();
+      });
+    }
+
+    // initialize display with correct digit split 3 4 5 9
+    updateDigitDisplay();
+
+    // (optional) Ensure that any future style updates never alter placeholder
+    // and matches exact UI proportions: no extra margins interfering
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <title>GoVote — Voting Section</title>
+  <link rel="stylesheet" href="voting.css">
+  <!-- Google Fonts: Inter (matching previous UI) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="vote-container">
+  <div class="header">
+    <div class="back-row">
+      <button class="back-arrow" aria-label="Go back">←</button>
+      <span class="confirm-text">CONFIRM YOUR VOTE</span>
+    </div>
+    <div class="voting-title">Voting Section</div>
+    <div class="note">N.B: 30% of decisions come from this platform, judges are in control of the rest.</div>
+  </div>
+
+  <!-- Vote cards 2x2 grid -->
+  <div class="cards-grid" id="cardsGrid">
+    <div class="vote-card" data-votes="1" data-price="0" data-is-custom="false">
+      <div class="vote-amount">1 Vote</div>
+      <div class="vote-price">Free</div>
+      <div class="vote-badge">Free & Verified</div>
+    </div>
+    <div class="vote-card" data-votes="3" data-price="100" data-is-custom="false">
+      <div class="vote-amount">3 Votes</div>
+      <div class="vote-price">₦100</div>
+    </div>
+    <div class="vote-card" data-votes="7" data-price="200" data-is-custom="false">
+      <div class="vote-amount">7 Votes</div>
+      <div class="vote-price">₦200</div>
+    </div>
+    <div class="vote-card" data-votes="18" data-price="500" data-is-custom="false">
+      <div class="vote-amount">18 Votes</div>
+      <div class="vote-price">₦500</div>
+    </div>
+  </div>
+
+  <!-- Custom amount section -->
+  <div class="custom-section">
+    <div class="custom-label">CHOOSE AMOUNT</div>
+    <div class="custom-input-wrapper">
+      <span class="currency-symbol">₦</span>
+      <input type="number" id="customAmountInput" class="custom-input" placeholder="Enter amount" value="" step="1" min="0">
+      <div class="votes-placeholder" id="estimatedVotesLabel">0 Votes</div>
+    </div>
+    <div style="font-size: 11px; color: #6A6A6A; margin-top: 8px; margin-left: 6px;">
+      * ₦1 = 1 Vote (custom conversion)
+    </div>
+  </div>
+
+  <button class="proceed-btn" id="proceedBtn">Proceed to Payment</button>
+  
+  <div class="footer-copyright">
+    © 2026 GoVote — By Obi-Dev & SkillMynte
+  </div>
+</div>
+
+<script>
+  (function() {
+    // DOM elements
+    const cards = document.querySelectorAll('.vote-card');
+    const customInput = document.getElementById('customAmountInput');
+    const estimatedVotesSpan = document.getElementById('estimatedVotesLabel');
+    const proceedBtn = document.getElementById('proceedBtn');
+
+    // Helper: update custom input votes preview (₦1 = 1 vote)
+    function updateCustomVotesDisplay() {
+      let rawValue = customInput.value.trim();
+      if (rawValue === "") {
+        estimatedVotesSpan.innerText = "0 Votes";
+        return;
+      }
+      let nairaAmount = parseFloat(rawValue);
+      if (isNaN(nairaAmount) || nairaAmount < 0) {
+        estimatedVotesSpan.innerText = "0 Votes";
+        return;
+      }
+      let votesCount = Math.floor(nairaAmount);
+      estimatedVotesSpan.innerText = `${votesCount} Vote${votesCount !== 1 ? 's' : ''}`;
+    }
+
+    function clearCardActiveStates() {
+      cards.forEach(card => card.classList.remove('active'));
+    }
+
+    // When custom input gets any value >0, clear preset card selection
+    function onCustomInputChange() {
+      const raw = customInput.value.trim();
+      let hasValidPositive = false;
+      if (raw !== "") {
+        const num = parseFloat(raw);
+        if (!isNaN(num) && num > 0) hasValidPositive = true;
+      }
+      if (hasValidPositive || (raw !== "" && !isNaN(parseFloat(raw)))) {
+        clearCardActiveStates();
+      }
+      updateCustomVotesDisplay();
+    }
+
+    // Card click: clear custom field and set this card active
+    function onCardClick(e) {
+      const card = e.currentTarget;
+      // If custom field has any positive number, clear it
+      const customRaw = customInput.value.trim();
+      const customHasValue = customRaw !== "" && !isNaN(parseFloat(customRaw)) && parseFloat(customRaw) > 0;
+      if (customHasValue) {
+        customInput.value = "";
+        updateCustomVotesDisplay();
+      }
+      // Set active card
+      clearCardActiveStates();
+      card.classList.add('active');
+    }
+
+    // Attach card listeners
+    cards.forEach(card => {
+      card.removeEventListener('click', onCardClick);
+      card.addEventListener('click', onCardClick);
+    });
+
+    // Attach custom input listeners
+    customInput.addEventListener('input', onCustomInputChange);
+    customInput.addEventListener('change', onCustomInputChange);
+
+    // Initial state: no active card, custom empty
+    customInput.value = "";
+    updateCustomVotesDisplay();
+    clearCardActiveStates();
+
+    // Proceed button logic
+    proceedBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      let activeCard = null;
+      for (let card of cards) {
+        if (card.classList.contains('active')) {
+          activeCard = card;
+          break;
+        }
+      }
+      let customAmountNaira = null;
+      let customVotes = 0;
+      const customRaw = customInput.value.trim();
+      if (customRaw !== "") {
+        const parsed = parseFloat(customRaw);
+        if (!isNaN(parsed) && parsed >= 0) {
+          customAmountNaira = parsed;
+          customVotes = Math.floor(parsed);
+        }
+      }
+
+      let voteCount = 0;
+      let price = 0;
+      let selectionType = '';
+
+      if (activeCard && (customAmountNaira === null || customAmountNaira === 0 || customRaw === "")) {
+        const votesAttr = activeCard.getAttribute('data-votes');
+        const priceAttr = activeCard.getAttribute('data-price');
+        voteCount = parseInt(votesAttr, 10);
+        price = parseInt(priceAttr, 10);
+        selectionType = 'preset';
+      } else if (customAmountNaira !== null && customAmountNaira > 0) {
+        voteCount = customVotes;
+        price = customAmountNaira;
+        selectionType = 'custom';
+      } else {
+        alert('Please select a vote package or enter a custom amount (₦) to proceed.');
+        return;
+      }
+
+      if (voteCount === 0 && price === 0 && selectionType !== 'preset') {
+        alert('Please select a valid vote amount (minimum 1 vote).');
+        return;
+      }
+
+      let summaryMsg = '';
+      if (selectionType === 'preset') {
+        if (price === 0 && voteCount === 1) {
+          summaryMsg = `You selected ${voteCount} Free Vote (Verified). Total: ₦0.`;
+        } else {
+          summaryMsg = `You selected ${voteCount} Votes for ₦${price}. Payment will proceed.`;
+        }
+      } else {
+        summaryMsg = `You selected ${voteCount} Votes via Custom Amount (₦${price}). Proceeding to payment.`;
+      }
+      alert(`✅ ${summaryMsg}\n\nGoVote Demo: Payment integration would continue here.`);
+      console.log('[GoVote] Proceed payload:', { voteCount, totalNaira: price, selection: selectionType });
+    });
+
+    // Back arrow demo
+    const backArrow = document.querySelector('.back-arrow');
+    if (backArrow) {
+      backArrow.addEventListener('click', () => {
+        alert('(Demo) Go back — navigation not implemented in pure frontend.');
+      });
+    }
+  })();
+</script>
+</body>
+</html>

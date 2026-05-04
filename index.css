@@ -1,0 +1,309 @@
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #0E0E0E;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      color: #EAEAEA;
+      line-height: 1.4;
+    }
+
+    /* mobile-first: full width, vertical scrollable */
+    .app-wrapper {
+      width: 100%;
+      background-color: #0E0E0E;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 20px 20px 40px 20px;
+      width: 100%;
+    }
+
+    /* --- TOP SECTION: search bar + icon button --- */
+    .search-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      width: 100%;
+    }
+
+    .search-bar {
+      flex: 1;
+      background-color: #1E1E1E;
+      border-radius: 60px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #2A2A2A;
+    }
+
+    .search-bar i {
+      color: #9A9A9A;
+      font-size: 16px;
+    }
+
+    .search-bar input {
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: #EAEAEA;
+      width: 100%;
+    }
+
+    .search-bar input::placeholder {
+      color: #6A6A6A;
+    }
+
+    .search-icon-btn {
+      background-color: #C9A95C;
+      border: none;
+      border-radius: 40px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #0E0E0E;
+    }
+
+    .search-icon-btn i {
+      font-size: 18px;
+      color: #0E0E0E;
+    }
+
+    .search-icon-btn:hover {
+      background-color: #B8984A;
+      transform: scale(0.96);
+    }
+
+    /* --- BRANDING --- */
+    .branding {
+      margin-bottom: 28px;
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .logo-white {
+      color: #EAEAEA;
+    }
+
+    .logo-gold {
+      color: #C9A95C;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #9A9A9A;
+      font-weight: 400;
+      line-height: 1.4;
+      max-width: 280px;
+    }
+
+    /* --- SECTION LABEL: CHOOSE EVENT --- */
+    .section-label {
+      margin: 24px 0 20px 0;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: #C9A95C;
+    }
+
+    /* --- EVENT BLOCKS (vertical stack) --- */
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+
+    /* Each event unit: image card (separate block) + text block below */
+    .event-unit {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    /* IMAGE CARD (large rectangular, rounded corners, dark background #161616) */
+    .image-card {
+      background-color: #161616;
+      border-radius: 24px;
+      width: 100%;
+      aspect-ratio: 16 / 9; /* rectangular shape like a typical event placeholder */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border: 1px solid #252525;
+      margin-bottom: 16px;  /* spacing between card and text below */
+    }
+
+    /* Empty placeholder — no content except lock icon if locked */
+    .image-card .placeholder-empty {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Lock icon styling for locked event: centered exactly */
+    .lock-center {
+      font-size: 32px;
+      color: #9A9A9A;
+      background: rgba(0,0,0,0.5);
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      backdrop-filter: blur(2px);
+    }
+
+    .lock-center i {
+      font-size: 28px;
+      color: #C9A95C;
+      text-shadow: 0 0 2px rgba(0,0,0,0.5);
+    }
+
+    /* For active card: image card has no lock (just empty placeholder) */
+    .active-card .image-card .lock-center {
+      display: none;
+    }
+
+    /* TEXT BELOW CARD (NOT INSIDE) */
+    .event-text {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .event-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #EAEAEA;
+      line-height: 1.3;
+    }
+
+    .event-title .gold-year {
+      color: #C9A95C;
+    }
+
+    .event-description {
+      font-size: 13px;
+      color: #9A9A9A;
+      line-height: 1.45;
+      max-width: 90%;
+    }
+
+
+    /* --- Style the link around the active event card --- */
+.event-unit.active-event-unit a {
+  display: block;           /* makes the whole card area clickable */
+  text-decoration: none;   /* removes default underline */
+  color: inherit;          /* inherits text color from parent */
+}
+
+/* Optional: keep the same hover transform & shadow on the image card */
+.event-unit.active-event-unit a .image-card {
+  transition: transform 0.15s ease, box-shadow 0.2s;
+}
+
+.event-unit.active-event-unit a:hover .image-card {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px -8px rgba(0,0,0,0.4);
+}
+
+/* Ensure the link doesn't break the existing spacing */
+.event-unit.active-event-unit a {
+  width: 100%;
+}
+    /* optional: differentiate active vs locked in text (just subtle if needed, but keep same style) */
+    /* footer */
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 11px;
+      color: #6A6A6A;
+      border-top: 1px solid #202020;
+      padding-top: 24px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ========== DESKTOP VIEW: CENTER LAYOUT (max-width: 560px) ========== */
+    @media (min-width: 768px) {
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: #0a0a0a;
+      }
+      .app-wrapper {
+        width: 100%;
+        align-items: center;
+      }
+      .container {
+        max-width: 560px;
+        width: 100%;
+        background-color: #0E0E0E;
+        border-radius: 44px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        margin: 40px 20px;
+        padding: 28px 24px 40px 24px;
+        border: 1px solid #262626;
+      }
+      /* maintain exact same card proportions */
+      .image-card {
+        aspect-ratio: 16 / 9;
+      }
+      .event-description {
+        max-width: 100%;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .container {
+        max-width: 580px;
+      }
+    }
+
+    /* interactive cursor for clickable cards */
+    .event-unit.active-event-unit {
+      cursor: pointer;
+    }
+    .event-unit.locked-event-unit {
+      cursor: pointer;
+    }
+
+    /* no redesign, just add pointer for better UX, preserving exact structure */
+    .event-unit.active-event-unit .image-card,
+    .event-unit.locked-event-unit .image-card {
+      transition: transform 0.15s ease, box-shadow 0.2s;
+    }
+    .event-unit.active-event-unit:hover .image-card,
+    .event-unit.locked-event-unit:hover .image-card {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px -8px rgba(0,0,0,0.4);
+    }
