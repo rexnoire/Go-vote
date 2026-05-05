@@ -39,17 +39,14 @@
 
     <div class="section-spacing">
       <div class="section-header">
-        <div class="section-label">TOP 3 CONTESTANTS</div>
+        <div class="section-label">TOP 2 CONTESTANTS</div>
       </div>
       <div class="top-three-row">
-        <div class="top-card" data-card="top1" data-event-name="Master GOUNI Spotlight" data-event-image="https://placehold.co/400x300/161616/C9A95C?text=Top+1" data-event-desc="The leading contestant of Master GOUNI 2026.">
+        <div class="top-card" data-id="offor">
           <div class="card-number accent-number">01</div>
         </div>
-        <div class="top-card" data-card="top2" data-event-name="Master GOUNI Runner-Up" data-event-image="https://placehold.co/400x300/161616/C9A95C?text=Top+2" data-event-desc="Second place contender with impressive votes.">
+        <div class="top-card" data-id="obi">
           <div class="card-number muted-number">02</div>
-        </div>
-        <div class="top-card" data-card="top3" data-event-name="Master GOUNI Bronze" data-event-image="https://placehold.co/400x300/161616/C9A95C?text=Top+3" data-event-desc="Third top contestant – strong performance.">
-          <div class="card-number muted-number">03</div>
         </div>
       </div>
     </div>
@@ -60,7 +57,7 @@
       </div>
 
       <div class="contestants-grid" id="contestantsContainer">
-        <div class="contestant-card" data-contestant="offor" data-event-name="Offor Franklin" data-event-image="https://placehold.co/600x400/161616/EAEAEA?text=Offor+Franklin" data-event-desc="Computer Science, 300LVL – a top contender with a bright future.">
+        <div class="contestant-card" data-id="offor">
           <div class="image-placeholder"></div>
           <div class="bottom-overlay">
             <span class="contestant-name">Offor Franklin</span>
@@ -72,23 +69,11 @@
           </div>
         </div>
 
-        <div class="contestant-card" data-contestant="obi" data-event-name="Obi Emmanuel" data-event-image="https://placehold.co/600x400/161616/EAEAEA?text=Obi+Emmanuel" data-event-desc="Computer Engineering, 400LVL – known for charismatic leadership.">
+        <div class="contestant-card" data-id="obi">
           <div class="image-placeholder"></div>
           <div class="bottom-overlay">
             <span class="contestant-name">Obi Emmanuel</span>
             <button class="star-button star-toggle" data-star="obi" data-filled="false">
-              <svg class="star-icon star-outline" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" fill="none" stroke="#9A9A9A" stroke-width="1.8"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <div class="contestant-card" data-contestant="miko" data-event-name="Miko Roth" data-event-image="https://placehold.co/600x400/161616/EAEAEA?text=Miko+Roth" data-event-desc="Mass Communication, 200LVL – crowd favourite with vibrant energy.">
-          <div class="image-placeholder"></div>
-          <div class="bottom-overlay">
-            <span class="contestant-name">Miko Roth</span>
-            <button class="star-button star-toggle" data-star="miko" data-filled="false">
               <svg class="star-icon star-outline" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" fill="none" stroke="#9A9A9A" stroke-width="1.8"/>
               </svg>
@@ -106,7 +91,7 @@
 
 <script>
   (function() {
-    // 1. SEARCH ICON CLICK => console.log("search clicked")
+    // Search button console log
     const searchBtn = document.getElementById('searchBtn');
     if (searchBtn) {
       searchBtn.addEventListener('click', function(e) {
@@ -115,18 +100,16 @@
       });
     }
 
-    // 2. CLICKING A CARD => console.log("card clicked") + redirect to contestants page with event data
-    // All contestant cards + top cards now have data attributes for event name, image, description
+    // Redirect to contestant page with unique ID
     const allCards = document.querySelectorAll('.contestant-card, .top-card');
     
-    function redirectToContestants(eventName, eventImage, eventDesc) {
-      const url = `contestant.html?event=${encodeURIComponent(eventName)}&image=${encodeURIComponent(eventImage)}&desc=${encodeURIComponent(eventDesc)}`;
-      window.location.href = url;
+    function redirectToContestant(contestantId) {
+      window.location.href = `contestant.html?id=${encodeURIComponent(contestantId)}`;
     }
     
     allCards.forEach(card => {
       card.addEventListener('click', function(e) {
-        // Stop propagation if star button was clicked (so star toggling doesn't trigger redirect)
+        // Prevent redirect if star button was clicked
         let target = e.target;
         let isStarButton = false;
         while (target && target !== card) {
@@ -139,18 +122,15 @@
         
         if (!isStarButton) {
           console.log("card clicked");
-          // Retrieve event data from the card's data attributes
-          const eventName = card.getAttribute('data-event-name');
-          const eventImage = card.getAttribute('data-event-image');
-          const eventDesc = card.getAttribute('data-event-desc');
-          if (eventName) {
-            redirectToContestants(eventName, eventImage, eventDesc);
+          const id = card.getAttribute('data-id');
+          if (id) {
+            redirectToContestant(id);
           }
         }
       });
     });
 
-    // 3. STAR TOGGLE LOGIC (unchanged)
+    // Star toggle logic (unchanged)
     const starButtons = document.querySelectorAll('.star-toggle');
     
     function updateStarIcon(button, isFilledNow) {
@@ -179,6 +159,7 @@
       });
     });
 
+    // Set initial stars
     const offorStarBtn = document.querySelector('.star-toggle[data-star="offor"]');
     if (offorStarBtn && offorStarBtn.getAttribute('data-filled') !== 'true') {
       offorStarBtn.setAttribute('data-filled', 'true');
@@ -195,11 +176,13 @@
       updateStarIcon(mikoStarBtn, false);
     }
 
+    // Back button
     const backBtn = document.querySelector(".back-btn");
-
-    backBtn.addEventListener("click", () => {
-      window.history.back();
-    });
+    if (backBtn) {
+      backBtn.addEventListener("click", () => {
+        window.history.back();
+      });
+    }
   })();
 </script>
 </body>
