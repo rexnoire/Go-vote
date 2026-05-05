@@ -10,14 +10,25 @@
 </head>
 <body>
 <div class="app-container">
+    <div class="top-bar">
+      <button class="back-button back-btn" aria-label="Back">
+        <svg class="back-icon" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+    </div>
     <div class="event-header">
-        <h1>UNIVERSITY STUDENT WEEK</h1>
-        <div class="event-sub">#GoVote2026</div>
+        <div class="small-label">UNIVERSITY STUDENT WEEK</div>
+        <div class="main-title">
+        Event Categories
+        </div>
+        <div class="description">
+        Browse through multiple categories and vote for your respective stars.
+        </div>
     </div>
 
     <div class="search-section">
-        <div class="search-label">Event Categories</div>
-        <div class="event-sub" style="margin-bottom: 12px; font-size:13px;">Browse through multiple categories and vote for your respective stars.</div>
+        
         <input type="text" class="search-input" placeholder="Search category" id="searchInput">
     </div>
 
@@ -38,9 +49,9 @@
             <div class="title-below">
                 <span class="category-title"><span class="accent-highlight">Master</span> GOUNI 2026</span>
             </div>
-            <div class="description-below">
+            <!-- <div class="description-below">
                 Crown the ultimate king of campus. Vote for leadership, charisma, and impact.
-            </div>
+            </div> -->
             <a href="master gouni.html" class="view-link">View Contestants →</a>
         </div>
 
@@ -54,9 +65,9 @@
             <div class="title-below">
                 <span class="category-title"><span class="accent-highlight">Miss</span> GOUNI 2026</span>
             </div>
-            <div class="description-below">
+            <!-- <div class="description-below">
                 Celebrating elegance, intelligence, and influence. Your vote decides the queen.
-            </div>
+            </div> -->
             <a href="master gouni.html" class="view-link">View Contestants →</a>
         </div>
 
@@ -70,9 +81,9 @@
             <div class="title-below">
                 <span class="category-title"><span class="accent-highlight">Best Dressed</span> On Campus</span>
             </div>
-            <div class="description-below">
+            <!-- <div class="description-below">
                 Style icon of the semester — from streetwear to couture fresh looks.
-            </div>
+            </div> -->
             <a href="master gouni.html" class="view-link">View Contestants →</a>
         </div>
 
@@ -86,9 +97,9 @@
             <div class="title-below">
                 <span class="category-title"><span class="accent-highlight">Best Dancer</span> On Campus</span>
             </div>
-            <div class="description-below">
+            <!-- <div class="description-below">
                 Rhythm, moves, and stage presence. Vote for the dancer who steals the show.
-            </div>
+            </div> -->
             <a href="master gouni.html" class="view-link">View Contestants →</a>
         </div>
 
@@ -102,9 +113,9 @@
             <div class="title-below">
                 <span class="category-title"><span class="accent-highlight">Master</span> GOUNI 2026</span>
             </div>
-            <div class="description-below">
+            <!-- <div class="description-below">
                 Second spotlight: Be part of the legacy. Vote for Master GOUNI again!
-            </div>
+            </div> -->
             <a href="master gouni.html" class="view-link">View Contestants →</a>
         </div>
     </div>
@@ -157,6 +168,11 @@
         filterCategories('');
     }
 
+    const backBtn = document.querySelector(".back-btn");
+
+    backBtn.addEventListener("click", () => {
+        window.history.back();
+    });
     // No extra JS on links — they are pure <a> tags and will navigate naturally.
     // All design rules are respected: image placeholders, text below, no gradients, no shadows.
 </script>

@@ -12,7 +12,7 @@
 <div class="phone-container">
   <div class="app-content">
     <div class="top-bar">
-      <button class="back-button" aria-label="Back">
+      <button class="back-button back-btn" aria-label="Back">
         <svg class="back-icon" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
           <path d="M15 18l-6-6 6-6" />
         </svg>
@@ -195,12 +195,11 @@
       updateStarIcon(mikoStarBtn, false);
     }
 
-    const backBtn = document.querySelector('.back-button');
-    if (backBtn) {
-      backBtn.addEventListener('click', function(e) {
-        // optional: no action needed
-      });
-    }
+    const backBtn = document.querySelector(".back-btn");
+
+    backBtn.addEventListener("click", () => {
+      window.history.back();
+    });
   })();
 </script>
 </body>

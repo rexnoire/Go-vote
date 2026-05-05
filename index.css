@@ -102,14 +102,16 @@
       align-items: center;
       gap: 12px;
       margin-bottom: 32px;
-      width: 100%;
+      /* width: fit-content; */
+      /* position: fixed; */
+      /* z-index: 10; */
     }
 
     .search-bar {
       flex: 1;
       background-color: #1E1E1E;
       border-radius: 60px;
-      padding: 12px 18px;
+      padding: 14px 18px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -140,8 +142,8 @@
       background-color: #C9A95C;
       border: none;
       border-radius: 40px;
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -163,10 +165,11 @@
     /* --- BRANDING --- */
     .branding {
       margin-bottom: 28px;
+      margin-top: 80px;
     }
 
     .logo {
-      font-size: 32px;
+      font-size: 36px;
       font-weight: 700;
       letter-spacing: -0.5px;
       margin-bottom: 8px;
@@ -191,10 +194,14 @@
     /* --- SECTION LABEL: CHOOSE EVENT --- */
     .section-label {
       margin: 24px 0 20px 0;
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 500;
       letter-spacing: 0.5px;
       color: #C9A95C;
+      margin-top: 50px;
+      border-left: 2px solid #C9A95C;
+      padding: 0px 10px 0px 8px;
+      letter-spacing: -0.3px;
     }
 
     /* --- EVENT BLOCKS (vertical stack) --- */
@@ -217,7 +224,7 @@
       background-color: #161616;
       border-radius: 24px;
       width: 100%;
-      aspect-ratio: 16 / 9;
+      aspect-ratio: 15 / 9;
       display: flex;
       align-items: center;
       justify-content: center;

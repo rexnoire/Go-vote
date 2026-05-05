@@ -31,21 +31,65 @@
             }
         }
 
-        .event-header {
-            margin-bottom: 28px;
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 24px;
+            }
+
+        .back-button {
+            background: #1e1e1e;
+            border: none;
+            cursor: pointer;
+            height: 45px;
+            width: 45px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 24px;
+            left: 20px;
+            z-index: 10;
         }
-        .event-header h1 {
-            font-size: 22px;
-            font-weight: 600;
-            letter-spacing: -0.3px;
-            color: #EAEAEA;
-            margin-bottom: 6px;
+
+        .back-icon {
+            width: 24px;
+            height: 24px;
+            stroke: #EAEAEA;
+            stroke-width: 2;
+            fill: none;
         }
-        .event-sub {
-            font-size: 13px;
+
+        .small-label {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
             color: #9A9A9A;
-            margin-top: 4px;
+            margin-bottom: 10px;
+            margin-top: 100px;
+        }
+
+        .main-title {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            color: #EAEAEA;
+        }
+
+        .title-accent {
+            color: #C9A95C;
+        }
+
+        .description {
+            font-size: 14px;
             font-weight: 400;
+            color: #9A9A9A;
+            line-height: 1.4;
+            margin-bottom: 24px;
         }
 
         .search-section {
@@ -62,8 +106,8 @@
             width: 100%;
             background-color: #161616;
             border: none;
-            border-radius: 14px;
-            padding: 12px 16px;
+            border-radius: 40px;
+            padding: 14px 16px;
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             color: #EAEAEA;
@@ -84,11 +128,12 @@
             background-color: transparent;
             font-size: 12px;
             color: #9A9A9A;
-            margin: 16px 0 28px 0;
+            margin: 16px 0 50px 0;
             padding: 0;
             letter-spacing: 0.2px;
             border-left: 2px solid #C9A95C;
             padding-left: 10px;
+            font-style: italic;
         }
 
         .category-block {
@@ -103,6 +148,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background: url(dave.png) no-repeat center;
+            background-size: 105%;
+            /* filter: blur(2px); */
         }
 
         .card-placeholder-icon {
@@ -123,10 +171,11 @@
         .title-below {
             margin-top: 14px;
             margin-bottom: 6px;
+            display: flex;
         }
         .category-title {
             font-size: 18px;
-            font-weight: 600;
+            font-weight: 700;
             color: #EAEAEA;
             letter-spacing: -0.2px;
         }
@@ -143,7 +192,7 @@
         /* Link styled exactly like previous button — but now a real link that navigates */
         .view-link {
             display: inline-block;
-            margin-top: 10px;
+            margin-top: 0px;
             font-size: 13px;
             font-weight: 500;
             color: #C9A95C;

@@ -36,13 +36,20 @@
     }
 
     .back-button {
-      background: transparent;
+      background: #1e1e1e;
       border: none;
       cursor: pointer;
-      padding: 8px 4px 8px 0;
+      height: 45px;
+      width: 45px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.2);
+      position: fixed;
+      top: 24px;
+      left: 20px;
+      z-index: 10;
     }
 
     .back-icon {
@@ -58,7 +65,8 @@
       font-weight: 500;
       letter-spacing: 0.5px;
       color: #9A9A9A;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
+      margin-top: 100px;
     }
 
     .main-title {
@@ -134,13 +142,16 @@
 
     .section-header {
       margin-bottom: 16px;
+      margin-top: 50px;
     }
 
     .section-label {
       font-size: 14px;
-      font-weight: 600;
-      color: #EAEAEA;
-      letter-spacing: 0.3px;
+      font-weight: 500;
+      color: #9a9a9a;
+      letter-spacing: -0.3px;
+      border-left: 2px solid #1f1f1f;
+      padding: 0px 10px 0px 8px;
     }
 
     .top-three-row {
@@ -151,9 +162,9 @@
 
     .top-card {
       background-color: #161616;
-      border-radius: 24px;
+      border-radius: 20px;
       flex: 1;
-      aspect-ratio: 3 / 4;
+      aspect-ratio: 3.5 / 4;
       position: relative;
       display: flex;
       align-items: flex-end;
@@ -172,7 +183,10 @@
     }
 
     .muted-number {
-      color: #4B4B4B;
+      color: transparent;
+      background: linear-gradient(-45deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 10%, rgba(255, 255, 255, 0.1) 80%, rgba(255, 255, 255, 0.2) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
     }
 
     .lineup-section {
@@ -198,7 +212,7 @@
     .image-placeholder {
       background-color: #161616;
       width: 100%;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 3 / 3;
       display: block;
     }
 

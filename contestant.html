@@ -4,16 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>GoVote — Live Vote Counter</title>
-  <link rel="stylesheet" href="contestant.css">
+  <link rel="stylesheet" href="contestant2.css">
   <!-- Google Fonts: Inter (clean, crisp) -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="top-bar">
+      <button class="back-button back-btn" aria-label="Back">
+        <svg class="back-icon" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+    </div>
+
 <div class="voting-card">
   <!-- TOP IMAGE AREA: strict placeholder, no text, no decoration -->
   <div class="image-placeholder" aria-label="image placeholder for contestant visual"></div>
 
   <div class="card-content">
+    <div class="gradient"></div>
     <!-- NAME exactly as screenshot -->
     <div class="contestant-name">Offor Franklin</div>
     <!-- SUBTEXT / course and level -->
@@ -21,10 +30,10 @@
 
     <!-- VOTE COUNTER: dynamic digits in separate boxes (4 digits) -->
     <div class="vote-digits" id="digitContainer">
-      <div class="digit-box" id="digit1">3</div>
+      <div class="digit-box one" id="digit1">3</div>
       <div class="digit-box" id="digit2">4</div>
       <div class="digit-box" id="digit3">5</div>
-      <div class="digit-box" id="digit4">9</div>
+      <div class="digit-box two" id="digit4">9</div>
     </div>
 
     <!-- LABEL: Live Vote Counter -->
@@ -130,6 +139,12 @@
 
     // (optional) Ensure that any future style updates never alter placeholder
     // and matches exact UI proportions: no extra margins interfering
+
+    const backBtn = document.querySelector(".back-btn");
+
+    backBtn.addEventListener("click", () => {
+        window.history.back();
+    });
   })();
 </script>
 </body>
