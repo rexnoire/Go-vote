@@ -1,4 +1,4 @@
-        * {
+            * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -170,6 +170,7 @@
       align-items: flex-end;
       justify-content: flex-end;
       padding: 16px;
+      cursor: pointer;
     }
 
     .card-number {
