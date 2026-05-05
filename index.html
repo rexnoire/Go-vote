@@ -4,13 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
   <title>GoVote — Student Voting</title>
+  <link rel="stylesheet" href="index.css">
   <!-- Google Fonts: Inter (premium, minimal) -->
-   <link rel="stylesheet" href="index.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <!-- Font Awesome 6 for lock icon & search icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+
+<!-- ========== PREMIUM ROUND PRELOADER (3 seconds, only rotation) ========== -->
+<div class="preloader" id="preloader">
+  <div class="premium-spinner">
+    <div class="spinner-ring"></div>
+    <div class="spinner-core"></div>
+  </div>
+</div>
+
 <div class="app-wrapper">
   <div class="container">
     <!-- 1. TOP SECTION: search bar + search icon button -->
@@ -37,39 +46,36 @@
     <!-- 3. SECTION LABEL: CHOOSE EVENT -->
     <div class="section-label">CHOOSE EVENT</div>
 
-    <!-- 4. EVENT BLOCKS (exact pattern: image card + text below, no text inside card) -->
+    <!-- 4. EVENT BLOCKS (image card + text below) -->
     <div class="events-list">
       
       <!-- ACTIVE EVENT: Unity Week 2026 -->
-      <a href="unity week.html" style="text-decoration: none;"><div class="event-unit active-event-unit" data-event-type="active" data-event-name="Unity Week 2026">
-        <!-- Image card separate block: rounded corners, dark bg, EMPTY placeholder (no lock) -->
-        <div class="image-card">
-          <div class="placeholder-empty">
-            <!-- completely empty for active event, no lock icon, just an empty rectangular image placeholder -->
+      <a href="unity week.html" style="text-decoration: none;">
+        <div class="event-unit active-event-unit" data-event-type="active" data-event-name="Unity Week 2026">
+          <div class="image-card">
+            <img src="https://drive.google.com/uc?export=view&id=1HZlsIjkp95zGJXbc73PnykCBkdIf_qKc" alt="Unity Week 2026" class="event-image" onerror="this.style.display='none'">
+          </div>
+          <div class="event-text">
+            <div class="event-title">
+              Unity Week <span class="gold-year">2026</span>
+            </div>
+            <div class="event-description">
+              Giving power to the students. Vote for your favorite stars here.
+            </div>
           </div>
         </div>
-        <!-- TEXT BELOW CARD (NOT inside the image card) -->
-        <div class="event-text">
-          <div class="event-title">
-            Unity Week <span class="gold-year">2026</span>
-          </div>
-          <div class="event-description">
-            Giving power to the students. Vote for your favorite stars here.
-          </div>
-        </div>
-      </div></a>
+      </a>
 
-      <!-- LOCKED EVENT: GOUNI COHON Election (with lock icon CENTER of image card) -->
+      <!-- LOCKED EVENT: GOUNI COHON Election (with lock icon overlay) -->
       <div class="event-unit locked-event-unit" data-event-type="locked" data-event-name="GOUNI COHON Election">
-        <!-- Image card separate block: rounded corners, dark bg, with lock icon in the CENTER -->
         <div class="image-card">
-          <div class="placeholder-empty">
+          <img src="https://drive.google.com/uc?export=view&id=1kKP7fc-HAVWnQ4xFeNf9Q0QwsgYziTvi" alt="GOUNI COHON Election" class="event-image" onerror="this.style.display='none'">
+          <div class="lock-overlay">
             <div class="lock-center">
               <i class="fas fa-lock"></i>
             </div>
           </div>
         </div>
-        <!-- TEXT BELOW CARD -->
         <div class="event-text">
           <div class="event-title">
             GOUNI COHON Election
@@ -89,28 +95,47 @@
 </div>
 
 <script>
-  // JavaScript: 
-  // - Click active card → console.log("Open event")
-  // - Click locked card → alert("This event is not available yet")
-  // - Keep simple, no redesign, no extra DOM manipulation that alters structure.
-  
+  // Ensure preloader lasts exactly 3 seconds, then fades out gracefully
+  window.addEventListener('load', function() {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+      // Wait 3 seconds from page load before hiding (smooth premium experience)
+      setTimeout(function() {
+        preloader.classList.add('hide');
+        // Optional: remove from DOM after transition
+        setTimeout(function() {
+          if (preloader.parentNode) {
+            preloader.style.display = 'none';
+          }
+        }, 700);
+      }, 2000); // 3 seconds exactly as requested
+    }
+  });
+
+  // Fallback for extremely fast connections: still show minimum 3 seconds
+  let preloaderVisible = true;
+  setTimeout(function() {
+    const preloader = document.getElementById('preloader');
+    if (preloader && preloaderVisible) {
+      preloader.classList.add('hide');
+      setTimeout(function() {
+        if (preloader.parentNode) preloader.style.display = 'none';
+      }, 700);
+    }
+  }, 2000);
+
+  // Existing event handlers
   document.addEventListener('DOMContentLoaded', function() {
-    // Get both event units using data attributes or classes
     const activeEventUnit = document.querySelector('.event-unit.active-event-unit');
     const lockedEventUnit = document.querySelector('.event-unit.locked-event-unit');
     
-    // Active event: click -> console.log("Open event")
     if (activeEventUnit) {
       activeEventUnit.addEventListener('click', function(e) {
-        // prevents any weird bubbling but does not affect layout
         e.stopPropagation();
         console.log("Open event");
-        // optional additional debug (just to match requirement exactly, still premium)
-        // but we don't change anything.
       });
     }
     
-    // Locked event: click -> alert("This event is not available yet")
     if (lockedEventUnit) {
       lockedEventUnit.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -118,7 +143,6 @@
       });
     }
     
-    // Optional (bonus extra but does not break any rule): search button console log demo
     const searchBtn = document.getElementById('searchButton');
     const searchField = document.querySelector('.search-bar input');
     if (searchBtn) {
@@ -131,7 +155,6 @@
         }
       });
     }
-    // Enter key on search field logs to console (non-intrusive)
     if (searchField) {
       searchField.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
@@ -141,10 +164,7 @@
         }
       });
     }
-    
-    // Extra structural verification note: all image cards remain empty placeholders, no text inside.
-    // Lock icon exactly centered inside locked image card.
-    console.log("GoVote UI loaded — layout matches exact screenshot rules: separate image cards, text below, locked icon centered.");
+    console.log("GoVote UI loaded — premium preloader fully hidden after 3 seconds.");
   });
 </script>
 </body>
