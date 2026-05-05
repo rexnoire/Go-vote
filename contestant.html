@@ -4,9 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>GoVote — Live Vote Counter</title>
-  <link rel="stylesheet" href="contestant2.css">
-  <!-- Google Fonts: Inter (clean, crisp) -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="contestant.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="top-bar">
@@ -18,133 +17,157 @@
     </div>
 
 <div class="voting-card">
-  <!-- TOP IMAGE AREA: strict placeholder, no text, no decoration -->
-  <div class="image-placeholder" aria-label="image placeholder for contestant visual"></div>
+  <div class="image-placeholder" id="dynamicImagePlaceholder"></div>
 
   <div class="card-content">
     <div class="gradient"></div>
-    <!-- NAME exactly as screenshot -->
-    <div class="contestant-name">Offor Franklin</div>
-    <!-- SUBTEXT / course and level -->
-    <div class="contestant-detail">COMPUTER SCIENCE, 300LVL</div>
+    <div class="contestant-name" id="contestantName">Offor Franklin</div>
+    <div class="contestant-detail" id="contestantDetail">COMPUTER SCIENCE, 300LVL</div>
 
-    <!-- VOTE COUNTER: dynamic digits in separate boxes (4 digits) -->
     <div class="vote-digits" id="digitContainer">
-      <div class="digit-box one" id="digit1">3</div>
-      <div class="digit-box" id="digit2">4</div>
-      <div class="digit-box" id="digit3">5</div>
-      <div class="digit-box two" id="digit4">9</div>
+      <div class="digit-box one" id="digit1">0</div>
+      <div class="digit-box" id="digit2">0</div>
+      <div class="digit-box" id="digit3">0</div>
+      <div class="digit-box two" id="digit4">0</div>
     </div>
 
-    <!-- LABEL: Live Vote Counter -->
     <div class="live-label">Live Vote Counter</div>
 
-    <!-- BUTTON: Vote Now -->
-    <a href="voting.html"><button class="vote-btn" id="voteNowBtn">Vote Now</button></a>
+    <button class="vote-btn" id="voteNowBtn">Vote Now</button>
 
-    <!-- ABOUT SECTION: exact double sentence as described (same paragraph style) -->
     <div class="about-title">About Contestant</div>
-    <div class="about-text">
-      Browse through multiple categories and vote for your respective stars, Browse through multiple categories and vote for your respective stars Browse through multiple categories and vote for your respective stars., Browse through multiple categories and vote for your respective stars Browse through multiple categories and vote for your respective star.
+    <div class="about-text" id="aboutText">
+      Browse through multiple categories and vote for your respective stars...
     </div>
 
-    <!-- FOOTER (subtle, only to match design structure, not intrusive) -->
     <div class="footer-note">GoVote • real‑time counter</div>
   </div>
 </div>
 
 <script>
   (function() {
-    // ---- VOTE COUNTER LOGIC ----
-    // The initial digits are exactly as screenshot: 3 4 5 9
-    // We'll use a numeric value and store internal state.
-    // number range: we want 4 digits exactly, from 0 to 9999 (padded to 4 digits)
-    // Starting vote count = 3459 (matches "3 4 5 9")
-    let currentVotes = 3459;
-
-    // DOM elements for each digit box
-    const digitElements = {
-      0: document.getElementById('digit1'), // thousands
-      1: document.getElementById('digit2'), // hundreds
-      2: document.getElementById('digit3'), // tens
-      3: document.getElementById('digit4')  // units
+    // ----- Contestant database (static info) -----
+    const contestantsData = {
+      offor: {
+        name: "Offor Franklin",
+        detail: "COMPUTER SCIENCE, 300LVL",
+        about: "Offor Franklin is a Computer Science student with a passion for building digital solutions. Known for his sharp analytical mind, he's a top contender in Master GOUNI 2026. His leadership and innovative thinking have earned admiration across campus.",
+        imageUrl: "https://placehold.co/600x400/2A2A2A/C9A95C?text=Offor+Franklin"
+      },
+      obi: {
+        name: "Obi Emmanuel",
+        detail: "COMPUTER ENGINEERING, 400LVL",
+        about: "Obi Emmanuel blends engineering excellence with charismatic leadership. As a final-year student, Obi has driven impactful tech projects. His vision for progress and ability to inspire others makes him a standout contestant.",
+        imageUrl: "https://placehold.co/600x400/2A2A2A/C9A95C?text=Obi+Emmanuel"
+      },
+      miko: {
+        name: "Miko Roth",
+        detail: "MASS COMMUNICATION, 200LVL",
+        about: "Miko Roth is a vibrant communicator and crowd favorite. With a strong media background, Miko uses influence to advocate for youth causes. Her energy and eloquence have captured the hearts of many voters.",
+        imageUrl: "https://placehold.co/600x400/2A2A2A/C9A95C?text=Miko+Roth"
+      }
     };
 
-    // Helper: update the 4 separate digit boxes based on currentVotes
+    // ----- LocalStorage helpers (votes start at 0) -----
+    function getStoredVotes() {
+      const stored = localStorage.getItem('contestantVotes');
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e) { return {}; }
+      }
+      return {};
+    }
+
+    function saveStoredVotes(votesObj) {
+      localStorage.setItem('contestantVotes', JSON.stringify(votesObj));
+    }
+
+    // Ensure every contestant has a vote count (default 0)
+    function initializeVotes() {
+      let votes = getStoredVotes();
+      let changed = false;
+      for (let id in contestantsData) {
+        if (typeof votes[id] !== 'number') {
+          votes[id] = 0;
+          changed = true;
+        }
+      }
+      if (changed) saveStoredVotes(votes);
+      return votes;
+    }
+
+    // Get current ID from URL (?id=xxx)
+    function getContestantId() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      return (id && contestantsData[id]) ? id : 'offor';
+    }
+
+    const contestantId = getContestantId();
+    const info = contestantsData[contestantId];
+
+    // Update static info
+    document.getElementById('contestantName').textContent = info.name;
+    document.getElementById('contestantDetail').textContent = info.detail;
+    document.getElementById('aboutText').textContent = info.about;
+    const imageDiv = document.getElementById('dynamicImagePlaceholder');
+    if (imageDiv) {
+      imageDiv.style.backgroundImage = `url('${info.imageUrl}')`;
+      imageDiv.style.backgroundSize = "cover";
+      imageDiv.style.backgroundPosition = "center";
+    }
+    document.title = `GoVote — ${info.name}`;
+
+    // ----- Vote counter (digits) based on stored votes -----
+    let currentVotes = 0;
+
+    const digitElements = {
+      0: document.getElementById('digit1'),
+      1: document.getElementById('digit2'),
+      2: document.getElementById('digit3'),
+      3: document.getElementById('digit4')
+    };
+
     function updateDigitDisplay() {
-      // Ensure we treat as integer and clamp between 0 and 9999
       let voteValue = currentVotes;
       if (voteValue < 0) voteValue = 0;
       if (voteValue > 9999) voteValue = 9999;
-      currentVotes = voteValue; // sync back
-
-      // convert to zero-padded 4-digit string
       const padded = String(voteValue).padStart(4, '0');
-      // splits into array of chars: thousands, hundreds, tens, units
-      const digits = padded.split('');  // ['3','4','5','9'] for ex
-
-      // update each box
+      const digits = padded.split('');
       for (let i = 0; i < 4; i++) {
-        if (digitElements[i]) {
-          digitElements[i].innerText = digits[i];
-        }
+        if (digitElements[i]) digitElements[i].innerText = digits[i];
       }
     }
 
-    // increment vote function: vote adds 1 (realistic scenario)
-    // Satisfies dynamic counter with easy update. In case of vote button click,
-    // we increment by 1. But we also could support custom, but spec wants button click 
-    // console log "Vote clicked" AND increment the count.
-    // According to requirements: "Vote counter must be dynamic, split digits into separate boxes,
-    // easy to update value. Button click: console.log('Vote clicked')"
-    // We'll also update the count value each time (vote increments).
-    function incrementVote() {
-      // increment current votes by 1 (but maximum 9999)
-      if (currentVotes < 9999) {
-        currentVotes++;
-      } else {
-        // if already max, we can clamp or do nothing (optional, no overflow)
-        currentVotes = 9999;
-      }
+    function refreshVotesFromStorage() {
+      const votes = getStoredVotes();
+      currentVotes = votes[contestantId] || 0;
       updateDigitDisplay();
     }
 
-    // Additional helper if there's any external requirement to set value easily.
-    // We also make it globally accessible for debug, but ensures dynamic.
-    window.setVoteValue = function(newValue) {
-      if (typeof newValue === 'number' && !isNaN(newValue)) {
-        let val = Math.floor(Math.abs(newValue));
-        if (val > 9999) val = 9999;
-        currentVotes = val;
-        updateDigitDisplay();
+    // Initialize votes (ensure all zero initially)
+    initializeVotes();
+    refreshVotesFromStorage();
+
+    // Listen for storage changes (in case another tab updates votes)
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'contestantVotes') {
+        refreshVotesFromStorage();
       }
-    };
+    });
 
-    // get current vote count (utility)
-    window.getCurrentVotes = () => currentVotes;
-
-    // attach event listener to "Vote Now" button
-    const voteButton = document.getElementById('voteNowBtn');
-    if (voteButton) {
-      voteButton.addEventListener('click', function() {
-        // Required console log exactly: "Vote clicked"
-        console.log("Vote clicked");
-        // also increment the live counter
-        incrementVote();
+    // ----- Redirect to voting page with this contestant's ID -----
+    const voteBtn = document.getElementById('voteNowBtn');
+    if (voteBtn) {
+      voteBtn.addEventListener('click', () => {
+        window.location.href = `voting.html?id=${contestantId}`;
       });
     }
 
-    // initialize display with correct digit split 3 4 5 9
-    updateDigitDisplay();
-
-    // (optional) Ensure that any future style updates never alter placeholder
-    // and matches exact UI proportions: no extra margins interfering
-
-    const backBtn = document.querySelector(".back-btn");
-
-    backBtn.addEventListener("click", () => {
-        window.history.back();
-    });
+    // ----- Back button -----
+    const backBtn = document.querySelector('.back-btn');
+    if (backBtn) {
+      backBtn.addEventListener('click', () => window.history.back());
+    }
   })();
 </script>
 </body>
