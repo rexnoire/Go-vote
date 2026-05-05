@@ -12,6 +12,74 @@
       line-height: 1.4;
     }
 
+    /* ---------- PREMIUM ROUND PRELOADER (3 sec, only rotates) ---------- */
+    .preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #0a0a0a, #0E0E0E);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1), visibility 0.6s ease;
+      backdrop-filter: blur(0px);
+    }
+
+    /* Elegant spinner container */
+    .premium-spinner {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Outer ring (glow & rotation) */
+    .spinner-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #C9A95C, #F3D78C, #C9A95C, #8B6B2A, #C9A95C);
+      mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+      animation: smoothSpin 1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+      box-shadow: 0 0 12px rgba(201, 169, 92, 0.4), 0 0 2px rgba(201, 169, 92, 0.8);
+    }
+
+    /* Inner subtle dot (optional refinement) */
+    .spinner-core {
+      width: 12px;
+      height: 12px;
+      background-color: #C9A95C;
+      border-radius: 50%;
+      opacity: 0.7;
+      box-shadow: 0 0 8px #C9A95C;
+      animation: pulseGlow 1.8s ease-in-out infinite;
+    }
+
+    /* Smooth rotation – only goes round */
+    @keyframes smoothSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Subtle pulse for the core (doesn't affect the "only round" rule – the main spinner still only rotates) */
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* Hide preloader after 3 seconds */
+    .preloader.hide {
+      opacity: 0;
+      visibility: hidden;
+    }
+
     /* mobile-first: full width, vertical scrollable */
     .app-wrapper {
       width: 100%;
@@ -149,16 +217,27 @@
       background-color: #161616;
       border-radius: 24px;
       width: 100%;
-      aspect-ratio: 16 / 9; /* rectangular shape like a typical event placeholder */
+      aspect-ratio: 16 / 9;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       border: 1px solid #252525;
-      margin-bottom: 16px;  /* spacing between card and text below */
+      margin-bottom: 16px;
+      overflow: hidden; /* Ensures the image stays within the rounded corners */
     }
 
-    /* Empty placeholder — no content except lock icon if locked */
+    .event-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Makes sure the image covers the area without distortion */
+      transition: transform 0.3s ease;
+    }
+
+    .event-unit:hover .event-image {
+      transform: scale(1.02);
+    }
+
     .image-card .placeholder-empty {
       width: 100%;
       height: 100%;
@@ -168,17 +247,31 @@
     }
 
     /* Lock icon styling for locked event: centered exactly */
+    .lock-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(3px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      transition: opacity 0.2s ease;
+    }
+
     .lock-center {
       font-size: 32px;
       color: #9A9A9A;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.7);
       width: 56px;
       height: 56px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      backdrop-filter: blur(2px);
     }
 
     .lock-center i {
@@ -187,12 +280,7 @@
       text-shadow: 0 0 2px rgba(0,0,0,0.5);
     }
 
-    /* For active card: image card has no lock (just empty placeholder) */
-    .active-card .image-card .lock-center {
-      display: none;
-    }
-
-    /* TEXT BELOW CARD (NOT INSIDE) */
+    /* TEXT BELOW CARD */
     .event-text {
       display: flex;
       flex-direction: column;
@@ -217,29 +305,26 @@
       max-width: 90%;
     }
 
-
     /* --- Style the link around the active event card --- */
-.event-unit.active-event-unit a {
-  display: block;           /* makes the whole card area clickable */
-  text-decoration: none;   /* removes default underline */
-  color: inherit;          /* inherits text color from parent */
-}
+    .event-unit.active-event-unit a {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
 
-/* Optional: keep the same hover transform & shadow on the image card */
-.event-unit.active-event-unit a .image-card {
-  transition: transform 0.15s ease, box-shadow 0.2s;
-}
+    .event-unit.active-event-unit a .image-card {
+      transition: transform 0.15s ease, box-shadow 0.2s;
+    }
 
-.event-unit.active-event-unit a:hover .image-card {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 20px -8px rgba(0,0,0,0.4);
-}
+    .event-unit.active-event-unit a:hover .image-card {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px -8px rgba(0,0,0,0.4);
+    }
 
-/* Ensure the link doesn't break the existing spacing */
-.event-unit.active-event-unit a {
-  width: 100%;
-}
-    /* optional: differentiate active vs locked in text (just subtle if needed, but keep same style) */
+    .event-unit.active-event-unit a {
+      width: 100%;
+    }
+
     /* footer */
     .footer {
       margin-top: 20px;
@@ -251,7 +336,7 @@
       letter-spacing: 0.3px;
     }
 
-    /* ========== DESKTOP VIEW: CENTER LAYOUT (max-width: 560px) ========== */
+    /* ========== DESKTOP VIEW: CENTER LAYOUT ========== */
     @media (min-width: 768px) {
       body {
         display: flex;
@@ -274,7 +359,6 @@
         padding: 28px 24px 40px 24px;
         border: 1px solid #262626;
       }
-      /* maintain exact same card proportions */
       .image-card {
         aspect-ratio: 16 / 9;
       }
@@ -289,7 +373,6 @@
       }
     }
 
-    /* interactive cursor for clickable cards */
     .event-unit.active-event-unit {
       cursor: pointer;
     }
@@ -297,7 +380,6 @@
       cursor: pointer;
     }
 
-    /* no redesign, just add pointer for better UX, preserving exact structure */
     .event-unit.active-event-unit .image-card,
     .event-unit.locked-event-unit .image-card {
       transition: transform 0.15s ease, box-shadow 0.2s;
