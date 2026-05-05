@@ -5,12 +5,11 @@
     }
 
     body {
-      background-color: #0E0E0E;      /* global background from previous UI */
+      background-color: #0E0E0E;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       font-weight: 400;
-      color: #EAEAEA;                 /* primary text */
+      color: #EAEAEA;
       line-height: 1.4;
-      -webkit-font-smoothing: antialiased;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -18,17 +17,13 @@
       padding: 20px;
     }
 
-    /* main container — centered, max-width matches previous desktop rule (560px) */
     .vote-container {
       max-width: 560px;
       width: 100%;
       margin: 0 auto;
       background-color: #0E0E0E;
-      border-radius: 0;               /* no extra rounding, keep flat */
-      position: relative;
     }
 
-    /* header section */
     .header {
       margin-bottom: 32px;
       padding-top: 8px;
@@ -46,74 +41,58 @@
       line-height: 1;
       color: #EAEAEA;
       cursor: pointer;
-      font-weight: 400;
-      transition: opacity 0.2s;
       background: none;
       border: none;
       font-family: inherit;
-      padding: 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .back-arrow:active {
-      opacity: 0.7;
     }
 
     .confirm-text {
-      font-size: 13px;               /* matching previous label sizes */
+      font-size: 13px;
       font-weight: 500;
       letter-spacing: 0.5px;
-      color: #9A9A9A;               /* secondary text */
+      color: #9A9A9A;
       text-transform: uppercase;
     }
 
     .voting-title {
-      font-size: 22px;               /* same as h1 in previous UI */
+      font-size: 22px;
       font-weight: 600;
       color: #EAEAEA;
       margin-bottom: 8px;
-      line-height: 1.3;
-      letter-spacing: -0.3px;
     }
 
     .note {
-      font-size: 12px;               /* small notice like previous N.B. */
+      font-size: 12px;
       color: #9A9A9A;
-      background: transparent;
-      padding: 0;
-      border-left: 2px solid #C9A95C; /* accent border */
+      border-left: 2px solid #C9A95C;
       padding-left: 10px;
       margin-top: 12px;
     }
 
-    /* 2x2 grid for vote cards */
     .cards-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 16px;
       margin-bottom: 28px;
     }
 
-    /* card styles — matches previous image-card background & rounded corners */
     .vote-card {
-      background-color: #161616;     /* card background from previous UI */
+      background-color: #161616;
       border-radius: 20px;
       padding: 18px 12px;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s ease;
       border: 2px solid transparent;
-      /* no shadows, no gradients — minimal */
     }
 
     .vote-card.active {
-      border-color: #C9A95C;         /* accent color from previous UI */
+      border-color: #C9A95C;
       background-color: #1c1c1c;
     }
 
     .vote-amount {
-      font-size: 20px;               /* within 18-22px range */
+      font-size: 20px;
       font-weight: 700;
       color: #EAEAEA;
       margin-bottom: 8px;
@@ -122,7 +101,7 @@
     .vote-price {
       font-size: 18px;
       font-weight: 600;
-      color: #C9A95C;               /* accent color */
+      color: #C9A95C;
       margin-bottom: 6px;
     }
 
@@ -134,10 +113,8 @@
       display: inline-block;
       padding: 4px 8px;
       border-radius: 30px;
-      letter-spacing: 0.3px;
     }
 
-    /* custom field area */
     .custom-section {
       margin-top: 12px;
       margin-bottom: 32px;
@@ -154,16 +131,15 @@
     .custom-input-wrapper {
       display: flex;
       align-items: center;
-      background-color: #161616;     /* matching card background */
-      border-radius: 14px;           /* consistent with search input */
+      background-color: #161616;
+      border-radius: 14px;
       border: 1px solid #262626;
-      transition: all 0.2s;
       padding: 4px 16px;
+      flex-wrap: wrap;
     }
 
     .custom-input-wrapper:focus-within {
       border-color: #C9A95C;
-      outline: 1px solid #C9A95C;
     }
 
     .currency-symbol {
@@ -171,7 +147,6 @@
       font-weight: 600;
       color: #C9A95C;
       margin-right: 12px;
-      padding: 12px 0;
     }
 
     .custom-input {
@@ -183,13 +158,7 @@
       font-weight: 500;
       color: #EAEAEA;
       outline: none;
-      font-family: 'Inter', monospace;
-    }
-
-    .custom-input::placeholder {
-      color: #5e5e5e;
-      font-weight: 400;
-      font-size: 14px;
+      min-width: 120px;
     }
 
     .votes-placeholder {
@@ -203,76 +172,48 @@
       white-space: nowrap;
     }
 
-    /* remove number input spinners */
     .custom-input::-webkit-outer-spin-button,
     .custom-input::-webkit-inner-spin-button {
       -webkit-appearance: none;
-      margin: 0;
     }
     .custom-input[type=number] {
       -moz-appearance: textfield;
     }
 
-    /* proceed button — matches previous "View Contestants" link style but as a full button */
     .proceed-btn {
       display: block;
       width: 100%;
       background: transparent;
       border: 2px solid #C9A95C;
-      border-radius: 14px;            /* consistent with input rounding */
+      border-radius: 14px;
       padding: 14px 20px;
       font-size: 16px;
       font-weight: 600;
       color: #C9A95C;
       text-align: center;
       cursor: pointer;
-      transition: all 0.2s ease;
-      font-family: inherit;
       margin-bottom: 30px;
-      letter-spacing: 0.3px;
     }
 
-    .proceed-btn:active {
-      opacity: 0.7;
-      transform: scale(0.98);
-    }
-
-    /* footer copyright */
     .footer-copyright {
       text-align: center;
       font-size: 12px;
       color: #6A6A6A;
-      padding-bottom: 16px;
-      letter-spacing: 0.2px;
       border-top: 1px solid #262626;
       padding-top: 20px;
     }
 
-    /* remove tap highlight on mobile */
-    .vote-card, .proceed-btn, .back-arrow {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    /* responsive: on smaller screens maintain gap */
     @media (max-width: 480px) {
-      .vote-container {
-        max-width: 100%;
-      }
       .cards-grid {
-        gap: 12px;
+        grid-template-columns: 1fr;
       }
-      .vote-card {
-        padding: 14px 8px;
+      .custom-input-wrapper {
+        flex-direction: column;
+        align-items: stretch;
       }
-      .vote-amount {
-        font-size: 18px;
+      .votes-placeholder {
+        margin-left: 0;
+        margin-top: 8px;
+        text-align: center;
       }
-      .vote-price {
-        font-size: 16px;
-      }
-    }
-
-    /* no extra shadows, gradients — minimal */
-    .vote-card.active .vote-price {
-      text-shadow: none;
     }
