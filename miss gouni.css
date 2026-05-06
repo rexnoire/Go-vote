@@ -1,12 +1,15 @@
+              @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+            
             * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       background-color: #0E0E0E;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Figtree', sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;

@@ -1,13 +1,16 @@
         /* ---------- GLOBAL RESET & DESIGN SYSTEM ---------- */
+ 
+        @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: #0E0E0E;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Figtree', sans-serif;
             font-weight: 400;
             color: #EAEAEA;
             line-height: 1.4;
@@ -107,7 +110,7 @@
             background-color: #161616;
             border: none;
             border-radius: 40px;
-            padding: 14px 16px;
+            padding: 14px 18px;
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             color: #EAEAEA;
@@ -115,9 +118,9 @@
             transition: 0.15s ease;
         }
         .search-input::placeholder {
-            color: #5e5e5e;
+            color: #6A6A6A;
             font-weight: 400;
-            font-size: 13px;
+            font-size: 14px;
         }
         .search-input:focus {
             outline: 1px solid #C9A95C;
@@ -148,9 +151,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: url(dave.png) no-repeat center;
+            /* background: ; */
             background-size: 105%;
             /* filter: blur(2px); */
+        }
+        .image-card.master-gouni-image {
+            background-image: url(dave.png);
+        }
+        .image-card.miss-gouni-image {
+            background-image: url(IMG-20260505-WA0020.jpg);
         }
 
         .card-placeholder-icon {
