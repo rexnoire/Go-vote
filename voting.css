@@ -6,7 +6,7 @@
 
     body {
       background-color: #0E0E0E;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: 'Inter', sans-serif;
       font-weight: 400;
       color: #EAEAEA;
       line-height: 1.4;
@@ -24,6 +24,37 @@
       background-color: #0E0E0E;
     }
 
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .back-button {
+      background: #1e1e1e;
+      border: none;
+      cursor: pointer;
+      height: 45px;
+      width: 45px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.2);
+      position: fixed;
+      top: 24px;
+      left: 20px;
+      z-index: 10;
+    }
+
+    .back-icon {
+      width: 24px;
+      height: 24px;
+      stroke: #EAEAEA;
+      stroke-width: 2;
+      fill: none;
+    }
     .header {
       margin-bottom: 32px;
       padding-top: 8px;
@@ -36,14 +67,33 @@
       margin-bottom: 20px;
     }
 
-    .back-arrow {
+    .small-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: #9A9A9A;
+      margin-bottom: 10px;
+      margin-top: 100px;
+    }
+
+    .main-title {
       font-size: 28px;
-      line-height: 1;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 12px;
       color: #EAEAEA;
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-family: inherit;
+    }
+
+    .title-accent {
+      color: #C9A95C;
+    }
+
+    .description {
+      font-size: 14px;
+      font-weight: 400;
+      color: #9A9A9A;
+      line-height: 1.4;
+      margin-bottom: 24px;
     }
 
     .confirm-text {
@@ -70,8 +120,10 @@
     }
 
     .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
+      /* display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); */
       gap: 16px;
       margin-bottom: 28px;
     }
@@ -84,6 +136,10 @@
       cursor: pointer;
       transition: all 0.2s ease;
       border: 2px solid transparent;
+      width: calc(50% - 10px);
+    }
+    .vote-card.one {
+      width: 100%;
     }
 
     .vote-card.active {

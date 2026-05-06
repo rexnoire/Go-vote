@@ -11,20 +11,27 @@
 <body>
 
 <div class="vote-container">
-  <div class="header">
-    <div class="back-row">
-      <button class="back-arrow" aria-label="Go back">←</button>
-      <span class="confirm-text">CONFIRM YOUR VOTE</span>
+  <div class="top-bar">
+      <button class="back-button back-btn" aria-label="Back">
+        <svg class="back-icon" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
     </div>
-    <div class="voting-title">Voting Section</div>
-    <div class="note">N.B: 30% of decisions come from this platform, judges are in control of the rest.</div>
-  </div>
+
+    <div class="small-label">CONFIRM YOUR VOTE</div>
+    <div class="main-title">
+      Voting Section
+    </div>
+    <div class="description">
+      Browse through multiple categories and vote for your respective stars.
+    </div>
 
   <!-- Preset cards -->
   <div class="cards-grid" id="cardsGrid">
-    <div class="vote-card" data-votes="1" data-price="0">
+    <div class="vote-card one" data-votes="1" data-price="0">
       <div class="vote-amount">1 Vote</div>
-      <div class="vote-price">Free</div>
+      <!-- <div class="vote-price">Free</div> -->
       <div class="vote-badge">Free & Verified</div>
     </div>
     <div class="vote-card" data-votes="1" data-price="50">
@@ -89,7 +96,7 @@
       if (amountNaira < 50) return 1;            // minimum 1 vote
       if (amountNaira >= 500) {
         // 21 votes for 500, then +6 votes per additional 100
-        const extra = Math.floor((amountNaira - 500) / 100);
+        const extra = Math.floor((amountNaira - 500) / 95);
         return 21 + (extra * 6);
       }
       // Between 50 and 500 → use nearest lower preset
@@ -246,9 +253,11 @@
     });
 
     // Back button
-    const backArrow = document.querySelector('.back-arrow');
-    if (backArrow) {
-      backArrow.addEventListener('click', () => window.location.href = `contestant.html?id=${contestantId}`);
+    const backBtn = document.querySelector(".back-btn");
+    if (backBtn) {
+      backBtn.addEventListener("click", () => {
+        window.history.back();
+      });
     }
   })();
 </script>
