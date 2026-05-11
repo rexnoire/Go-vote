@@ -20,6 +20,7 @@ $contestant = $result->fetch_assoc();
 $contestant_name = htmlspecialchars($contestant['name']);
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +32,6 @@ $conn->close();
   <script src="https://js.paystack.co/v2/inline.js"></script>
 </head>
 <body>
-
 <div class="vote-container">
   <div class="top-bar">
       <button class="back-button back-btn" aria-label="Back">
@@ -49,12 +49,8 @@ $conn->close();
       Vote for <?php echo $contestant_name; ?> – your support matters!
     </div>
 
-  <!-- Preset cards -->
+  <!-- Preset cards (FREE VOTE CARD REMOVED) -->
   <div class="cards-grid" id="cardsGrid">
-    <div class="vote-card one" data-votes="1" data-price="0" id="freeVoteCard">
-      <div class="vote-amount">1 Vote</div>
-      <div class="vote-badge">Free & Verified</div>
-    </div>
     <div class="vote-card" data-votes="1" data-price="50">
       <div class="vote-amount">1 Vote</div>
       <div class="vote-price">₦50</div>
@@ -81,7 +77,7 @@ $conn->close();
       <input type="number" id="customAmountInput" class="custom-input" placeholder="Enter amount" step="1" min="0">
       <div class="votes-placeholder" id="estimatedVotesLabel">0 Votes</div>
     </div>
-    <div style="font-size: 11px; color: #6A6A6A; margin-top: 8px;">
+    <div id="voteNote" style="font-size: 11px; color: #6A6A6A; margin-top: 8px;">
       * ₦50 = 1 vote | ₦100 = 3 | ₦200 = 8 | ₦500 = 21 | Above ₦500: +6 votes per ₦100 (e.g., ₦700 → 33 votes)
     </div>
   </div>
@@ -99,34 +95,19 @@ $conn->close();
       window.location.href = "mister-gouni.php";
     }
 
-    // ----- FREE VOTE RESTRICTION -----
-    const FREE_VOTE_KEY = `freeVoteUsed_${contestantId}`;
-    let freeVoteUsed = localStorage.getItem(FREE_VOTE_KEY) === 'true';
-
-    const freeVoteCard = document.getElementById('freeVoteCard');
-    if (freeVoteUsed) {
-      // Disable free vote card
-      freeVoteCard.style.opacity = '0.5';
-      freeVoteCard.style.pointerEvents = 'none';
-      freeVoteCard.classList.add('disabled');
-      // Optionally add a tooltip or badge
-      const badge = document.createElement('div');
-      badge.className = 'vote-badge';
-      badge.innerText = 'Already Used';
-      badge.style.backgroundColor = '#555';
-      badge.style.marginTop = '8px';
-      freeVoteCard.appendChild(badge);
-    }
-
-    // Helper to add free vote via AJAX (updates MySQL directly)
-    async function addFreeVotes(voteCount) {
-      let formData = new URLSearchParams();
-      formData.append('contestant_id', contestantId);
-      formData.append('votes', voteCount);
-      let res = await fetch('update_votes.php', { method: 'POST', body: formData });
-      let data = await res.json();
-      if (data.success) return true;
-      throw new Error(data.error || 'Failed to add votes');
+    // --- Fade-out replacement for "50 naira for one vote" to "50 naira for free vote" ---
+    const noteDiv = document.getElementById('voteNote');
+    if (noteDiv) {
+      // Replace "₦50 = 1 vote" with "50 naira for free vote"
+      noteDiv.innerHTML = noteDiv.innerHTML.replace('₦50 = 1 vote', '50 naira for free vote');
+      // Apply fade-out after a short delay (so user can see the change)
+      setTimeout(() => {
+        noteDiv.classList.add('fade-out-note');
+        // Optional: remove from DOM after fade completes
+        noteDiv.addEventListener('transitionend', () => {
+          noteDiv.style.display = 'none';
+        }, { once: true });
+      }, 500);
     }
 
     // --- Vote calculation for custom amounts ---
@@ -175,20 +156,13 @@ $conn->close();
     }
 
     function onCardClick(e) {
-      const card = e.currentTarget;
-      // If it's the free vote card and it's already used, prevent selection
-      if (card.id === 'freeVoteCard' && freeVoteUsed) {
-        alert("You have already used your free vote for this contestant.");
-        e.stopPropagation();
-        return;
-      }
       const customRaw = customInput.value.trim();
       if (customRaw !== "" && !isNaN(parseFloat(customRaw)) && parseFloat(customRaw) > 0) {
         customInput.value = "";
         updateCustomVotesDisplay();
       }
       clearCardActiveStates();
-      card.classList.add('active');
+      e.currentTarget.classList.add('active');
     }
 
     cards.forEach(card => {
@@ -238,8 +212,8 @@ $conn->close();
       return true;
     }
 
-    // --- Proceed button logic (Free vote or paid) ---
-    proceedBtn.addEventListener('click', async (e) => {
+    // --- Proceed button logic (no free vote) ---
+    proceedBtn.addEventListener('click', (e) => {
       e.preventDefault();
 
       let activeCard = null;
@@ -257,12 +231,10 @@ $conn->close();
       }
 
       let voteCount = 0, price = 0;
-      let isFreeVote = false;
 
       if (activeCard && (customAmountNaira === null || customAmountNaira === 0)) {
         voteCount = parseInt(activeCard.getAttribute('data-votes'), 10);
         price = parseInt(activeCard.getAttribute('data-price'), 10);
-        if (price === 0) isFreeVote = true;
       } else if (customAmountNaira !== null && customAmountNaira > 0) {
         voteCount = customVotes;
         price = customAmountNaira;
@@ -276,33 +248,7 @@ $conn->close();
         return;
       }
 
-      // Free vote (price = 0)
-      if (isFreeVote) {
-        // Check again if free vote already used (in case UI was bypassed)
-        if (freeVoteUsed) {
-          alert("You have already used your free vote for this contestant.");
-          return;
-        }
-        try {
-          await addFreeVotes(voteCount);
-          // Mark free vote as used in localStorage
-          localStorage.setItem(FREE_VOTE_KEY, 'true');
-          freeVoteUsed = true;
-          // Disable the free vote card visually
-          freeVoteCard.style.opacity = '0.5';
-          freeVoteCard.style.pointerEvents = 'none';
-          freeVoteCard.classList.add('disabled');
-          // Remove active class if it had it
-          freeVoteCard.classList.remove('active');
-          alert(`🎉 Thank you for your free vote! ${voteCount} vote(s) added.`);
-          window.location.href = `contestants.php?id=${contestantId}`;
-        } catch (err) {
-          alert(err.message);
-        }
-        return;
-      }
-
-      // Paid flow – real Paystack
+      // Paid flow – real Paystack (free vote completely removed)
       initiatePayment(price, voteCount);
     });
 
